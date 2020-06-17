@@ -1,0 +1,22 @@
+extends ../layouts/mainLayout.pug
+
+block styles
+  link(rel="stylesheet", href="css/product.css")
+
+block content
+  .grid
+    if products.length > 0 
+      each prod in products
+        article.card.product-item
+          .content
+            header.card-header
+              h1.product-title #{prod.title}
+            .card-image
+              img(src="https://assets.entrepreneur.com/content/3x2/2000/20191219170611-GettyImages-1152794789.jpeg", alt="Book")
+            .card-content
+              h2.product-price $19.99
+              p.product-description A very interesting book
+          .card-actions
+            button.action-btn Add to Cart
+    else 
+      h1 There are no products

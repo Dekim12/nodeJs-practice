@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{title} 
+    link(rel="stylesheet", href="../css/main.css")
+    block styles
+  body
+    header.main-header
+      nav.nav-bar
+        ul.nav-list
+          li.nav-item
+            a(href="/" class=(path === "/" && "active")) Shop
+          li.nav-item
+            a(href="/products" class=(path === "/products" && "active")) Products
+          li.nav-item
+            a(href="/card" class=(path === "/card" && "active")) Card
+          li.nav-item
+            a(href="/admin/add-product" class=(path === "/admin/add-product" && "active")) Add Product
+          li.nav-item
+            a(href="/admin/products" class=(path === "/admin/products" && "active")) Products
+
+    main 
+      block content
