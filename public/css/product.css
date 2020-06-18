@@ -55,12 +55,30 @@
   font-size: 18px;
 }
 
-.card-action {
+.card-actions {
+  display: flex;
   align-self: flex-end;
+  justify-content: center;
+  width: 100%;
 }
 
-.action-btn {
-  padding: 7px 15px;
+.action-link {
+  text-decoration: none;
+  text-align: center;
+  margin: 0 10px;
+}
+
+.card-actions form,
+.product-info form {
+  margin: 0;
+  padding: 0;
+  margin: 0 10px;
+}
+
+.action-btn,
+.action-link {
+  width: 120px;
+  padding: 7px 0;
   border: 1px solid #407e45;
   color: #407e45;
   background-color: #ffffff;
@@ -70,7 +88,39 @@
   border-radius: 5px;
 }
 
-.action-btn:hover {
+.action-btn:hover,
+.action-link:hover {
   background-color: #407e45;
   color: #ffffff;
+}
+
+.product-info {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+hr {
+  width: 1000px;
+}
+
+.product-info h1 {
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.product-info .price {
+  font-size: 30px;
+}
+
+.product-info img {
+  width: 500px;
+  height: 400px;
+}
+
+.product-info .description {
+  font-size: 25px;
+  margin-bottom: 50px;
 }

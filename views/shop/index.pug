@@ -1,5 +1,26 @@
-
 extends ../layouts/mainLayout.pug
 
+block styles
+  link(rel="stylesheet", href="css/product.css")
+
 block content
-  h1 Shop Screen
+  .grid
+    if products.length > 0 
+      each prod in products
+        article.card.product-item
+          .content
+            header.card-header
+              h1.product-title #{prod.title}
+            .card-image
+              img(src=prod.imageUrl alt="Book")
+            .card-content
+              h2.product-price #{'$' + (prod.price || 0)} 
+              p.product-description #{prod.description || 'No description'}
+          .card-actions
+            a.action-link(href="/products/".concat(prod.id)) Details
+            form(action="/cart" method="POST")
+              button.action-btn(type="submit") Add to Cart
+              input(type="hidden" name="productId" value=prod.id)
+
+    else 
+      h1 There are no products

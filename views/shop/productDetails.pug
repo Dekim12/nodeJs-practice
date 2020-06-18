@@ -1,4 +1,15 @@
 extends ../layouts/mainLayout.pug
 
+block styles
+  link(rel="stylesheet", href="../css/product.css")
+
 block content
-  h1 Product Details
+  .product-info
+    h1 #{product.title}
+    hr
+    p.price #{"$" + product.price}
+    img(src=product.imageUrl, alt=product.title)
+    p.description #{product.description}
+      form(action="/cart" method="POST")
+        button.action-btn(type="submit") Add to Cart
+        input(type="hidden" name="productId" value=product.id)

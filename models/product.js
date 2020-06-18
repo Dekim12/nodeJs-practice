@@ -6,8 +6,19 @@ const rootDir = require("../utils/app-path");
 const filePath = path.join(rootDir, "data", "products.json");
 
 class Product {
-  constructor(title) {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
     this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+  }
+
+  update(products) {
+    const currentProductIndex = products.findIndex(
+      (prod) => prod.id === this.id
+    );
+    products[currentProductIndex] = this;
   }
 
   save() {
@@ -18,7 +29,13 @@ class Product {
         products = JSON.parse(fileContent);
       }
 
-      products.push(this);
+      if (this.id) {
+        this.update(products);
+      } else {
+        this.id = Math.floor(Math.random() * 100000).toString();
+        products.push(this);
+      }
+
       fs.writeFile(filePath, JSON.stringify(products), (err) => {
         console.log("------", err);
       });
@@ -31,6 +48,19 @@ class Product {
         cb([]);
       } else {
         cb(JSON.parse(fileContent));
+      }
+    });
+  }
+
+  static findById(prodId, cb) {
+    fs.readFile(filePath, (err, fileContent) => {
+      if (err) {
+        cb();
+      } else {
+        const product = JSON.parse(fileContent).find(
+          (prod) => prod.id === prodId
+        );
+        cb(product);
       }
     });
   }

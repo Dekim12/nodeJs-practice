@@ -15,8 +15,16 @@
 }
 
 .form-control input {
+  margin-bottom: 15px;
   border: 1px solid #31866a;
   font: inherit;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.form-control textarea {
+  font-size: 16px;
+  border: 1px solid #31866a;
   border-radius: 5px;
   padding: 5px 10px;
 }
