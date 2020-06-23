@@ -4,6 +4,10 @@ body {
   font-family: sans-serif;
 }
 
+h2 {
+  color: black;
+}
+
 main {
   padding: 10px;
   display: flex;

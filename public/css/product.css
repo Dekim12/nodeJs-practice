@@ -124,3 +124,12 @@ hr {
   font-size: 25px;
   margin-bottom: 50px;
 }
+
+.cart-item {
+  display: flex;
+  align-items: center;
+}
+
+.cart-item p {
+  margin: 25px 20px;
+}

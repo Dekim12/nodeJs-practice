@@ -39,6 +39,13 @@ const postEditProduct = (req, res) => {
   res.redirect("/admin/products");
 };
 
+const postDeleteProduct = (req, res) => {
+  const { id } = req.body;
+
+  Product.delete(id);
+  res.redirect("/products");
+};
+
 const getAdminProductsPage = (req, res, next) => {
   res.render("admin/products", {
     title: "Admin Products",
@@ -51,5 +58,6 @@ module.exports = {
   postAddProductsPage,
   getEditProductPage,
   postEditProduct,
+  postDeleteProduct,
   getAdminProductsPage,
 };

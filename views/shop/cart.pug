@@ -1,4 +1,18 @@
 extends ../layouts/mainLayout.pug
 
+block styles
+  link(rel="stylesheet", href="css/product.css")
+
 block content
-  h1 Product Cart
+  if products.length > 0 
+    ul
+      each prod in products 
+        li.cart-item 
+          p #{prod.data.title + " (" + prod.count+ ")"}
+          form(action=("/cart-delete-item") method="POST")
+            input(type="hidden" name="productId" value=prod.data.id)
+            button.action-btn(type="submit") DELETE
+    p #{totalPrice}
+
+  else   
+    h1 There are no products in Cart!

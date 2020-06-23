@@ -19,6 +19,7 @@ block content
           .card-actions
             a.action-link(href=("/admin/edit-product/" + prod.id + "?edit=true")) Edit
             form(action="/admin/delete-product" method="POST")
+              input(type="hidden" name="id" value=(prod.id))
               button.action-btn(type="submit") Delete
     else 
       h1 There are no products
