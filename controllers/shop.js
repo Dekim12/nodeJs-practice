@@ -2,8 +2,8 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 const getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([products, info]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/index", {
         products,
         title: "Shop",
@@ -14,9 +14,9 @@ const getIndex = (req, res, next) => {
 };
 
 const getProductsPage = (req, res, next) => {
-  Product.fetchAll()
-    .then(([products, info]) => {
-      res.render("shop/productsList", {
+  Product.findAll()
+    .then((products) => {
+      res.render("shop/index", {
         products,
         title: "Products",
         path: "/products",
@@ -28,8 +28,8 @@ const getProductsPage = (req, res, next) => {
 const getProduct = (req, res, next) => {
   const { productId } = req.params;
 
-  Product.findById(productId)
-    .then(([products]) => {
+  Product.findAll({ where: { id: productId } })
+    .then((products) => {
       const product = products[0];
 
       res.render("shop/productDetails", {
@@ -43,7 +43,7 @@ const getProduct = (req, res, next) => {
 
 const getCartPage = (req, res, next) => {
   Cart.getCart((cart) => {
-    Product.fetchAll((products) => {
+    Product.findAll().then((products) => {
       const cartProducts = [];
 
       cart.products.forEach(({ id }, index) => {
@@ -70,8 +70,8 @@ const getCartPage = (req, res, next) => {
 const postCart = (req, res, next) => {
   const { productId } = req.body;
 
-  Product.findById(productId)
-    .then(([products]) => {
+  Product.findAll({ where: { id: productId } })
+    .then((products) => {
       const product = products[0];
 
       Cart.addProduct(productId, product.price);
@@ -84,8 +84,12 @@ const postCart = (req, res, next) => {
 const postDeleteCartItem = (req, res) => {
   const { productId } = req.body;
 
-  Product.findById(productId)
-    .then(([products]) => {
+  Product.findAll({
+    where: {
+      id: productId,
+    },
+  })
+    .then((products) => {
       const prod = products[0];
       Cart.deleteProduct(productId, prod.price);
 

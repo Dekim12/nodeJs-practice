@@ -1,52 +1,30 @@
-const db = require("../utils/database");
-const Cart = require("./cart");
+const Sequelize = require("sequelize");
 
-class Product {
-  constructor(id, title, imageUrl, description, price) {
-    this.id = id;
-    this.title = title;
-    this.imageUrl = imageUrl;
-    this.description = description;
-    this.price = price;
-  }
+const sequelize = require("../utils/database");
 
-  update(products) {
-    // const currentProductIndex = products.findIndex(
-    //   (prod) => prod.id === this.id
-    // );
-    // products[currentProductIndex] = this;
-  }
-
-  save() {
-    return db.execute(
-      "INSERT INTO products (title, price, imageUrl, description) VALUES(?, ?, ?, ?)",
-      [this.title, this.price, this.imageUrl, this.description]
-    );
-  }
-
-  static delete(id) {
-    // fs.readFile(filePath, (err, fileContent) => {
-    //   if (err) {
-    //     console.log("----delete error");
-    //   } else {
-    //     const products = JSON.parse(fileContent);
-    //     const product = products.find((prod) => prod.id === id);
-    //     const updatedProducts = products.filter((prod) => prod.id !== id);
-    //     Cart.deleteProduct(id, product.price);
-    //     fs.writeFile(filePath, JSON.stringify(updatedProducts), (err) => {
-    //       console.log("------", err);
-    //     });
-    //   }
-    // });
-  }
-
-  static fetchAll() {
-    return db.execute("SELECT * FROM products");
-  }
-
-  static findById(prodId) {
-    return db.execute("SELECT * FROM products WHERE products.id = ?", [prodId]);
-  }
-}
+const Product = sequelize.define("product", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  price: {
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+});
 
 module.exports = Product;

@@ -6,6 +6,7 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/errors");
 const rootDir = require("./utils/app-path");
+const sequelize = require("./utils/database");
 
 const app = express();
 
@@ -20,4 +21,10 @@ app.use(shopRoutes);
 
 app.use(errorController.get404Error);
 
-app.listen(3000, () => console.log("server works.........."));
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log("---sync result", result);
+    app.listen(3000, () => console.log("server works.........."));
+  })
+  .catch((err) => console.log(err));
