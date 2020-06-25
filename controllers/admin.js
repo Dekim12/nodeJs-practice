@@ -10,26 +10,34 @@ const getAddProductsPage = (req, res, next) => {
 const postAddProductsPage = (req, res) => {
   const { productTitle, imageUrl, price, description } = req.body;
 
-  new Product(null, productTitle, imageUrl, description, price).save();
-  res.redirect("/");
+  new Product(null, productTitle, imageUrl, description, price)
+    .save()
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
 };
 
 const getEditProductPage = (req, res) => {
   const editMode = req.query.edit;
   const { productId } = req.params;
 
-  Product.findById(productId, (product) => {
-    if (!product) {
-      res.redirect("/");
-    }
+  Product.findById(productId)
+    .then(([products]) => {
+      const product = products[0];
 
-    res.render("admin/editProduct", {
-      title: "Edit Product",
-      path: "/admin/edit-products",
-      isEdit: !!editMode,
-      product,
-    });
-  });
+      if (!product) {
+        res.redirect("/");
+      }
+
+      res.render("admin/editProduct", {
+        title: "Edit Product",
+        path: "/admin/edit-products",
+        isEdit: !!editMode,
+        product,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 const postEditProduct = (req, res) => {
