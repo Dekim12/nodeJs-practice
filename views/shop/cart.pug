@@ -5,14 +5,16 @@ block styles
 
 block content
   if products.length > 0 
-    ul
+    ul.cart-items
       each prod in products 
         li.cart-item 
-          p #{prod.data.title + " (" + prod.count+ ")"}
+          p #{prod.title}
+          p #{"Quantity: " + prod.cartItem.quantity}
           form(action=("/cart-delete-item") method="POST")
-            input(type="hidden" name="productId" value=prod.data.id)
+            input(type="hidden" name="productId" value=prod.id)
             button.action-btn(type="submit") DELETE
-    p #{totalPrice}
+    form(action="/create-order" method="POST")
+      button.action-btn(type="submit") ORDER
 
   else   
     h1 There are no products in Cart!

@@ -10,12 +10,13 @@ const getAddProductsPage = (req, res, next) => {
 const postAddProductsPage = (req, res) => {
   const { productTitle, imageUrl, price, description } = req.body;
 
-  Product.create({
-    title: productTitle,
-    price,
-    imageUrl,
-    description,
-  })
+  req.user
+    .createProduct({
+      title: productTitle,
+      price,
+      imageUrl,
+      description,
+    })
     .then((result) => {
       res.redirect("/admin/products");
     })
@@ -26,11 +27,12 @@ const getEditProductPage = (req, res) => {
   const editMode = req.query.edit;
   const { productId } = req.params;
 
-  Product.findAll({
-    where: {
-      id: productId,
-    },
-  })
+  req.user
+    .getProducts({
+      where: {
+        id: productId,
+      },
+    })
     .then((products) => {
       const product = products[0];
 
@@ -51,7 +53,8 @@ const getEditProductPage = (req, res) => {
 const postEditProduct = (req, res) => {
   const { id, productTitle, imageUrl, price, description } = req.body;
 
-  Product.findAll({ where: { id } })
+  req.user
+    .getProducts({ where: { id } })
     .then((products) => {
       const product = products[0];
 
@@ -71,11 +74,12 @@ const postEditProduct = (req, res) => {
 const postDeleteProduct = (req, res) => {
   const { id } = req.body;
 
-  Product.findAll({
-    where: {
-      id,
-    },
-  })
+  req.user
+    .getProducts({
+      where: {
+        id,
+      },
+    })
     .then((products) => {
       return products[0].destroy();
     })
@@ -86,7 +90,8 @@ const postDeleteProduct = (req, res) => {
 };
 
 const getAdminProductsPage = (req, res, next) => {
-  Product.findAll()
+  req.user
+    .getProducts()
     .then((products) => {
       res.render("admin/products", {
         products,

@@ -125,11 +125,26 @@ hr {
   margin-bottom: 50px;
 }
 
+.cart-items {
+  width: 50%;
+  padding: 0;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
 .cart-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  margin: 15px 0;
+  padding: 5px 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .cart-item p {
-  margin: 25px 20px;
+  font-size: 22px;
+  font-weight: bold;
+  min-width: 200px;
 }
