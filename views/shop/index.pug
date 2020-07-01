@@ -17,10 +17,10 @@ block content
               h2.product-price #{'$' + (prod.price || 0)} 
               p.product-description #{prod.description || 'No description'}
           .card-actions
-            a.action-link(href="/products/".concat(prod.id)) Details
+            a.action-link(href="/products/".concat(prod._id)) Details
             form(action="/cart" method="POST")
               button.action-btn(type="submit") Add to Cart
-              input(type="hidden" name="productId" value=prod.id)
+              input(type="hidden" name="productId" value=prod._id)
 
     else 
       h1 There are no products

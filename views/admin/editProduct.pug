@@ -19,7 +19,7 @@ block content
       textarea(name="description", cols="40", rows="8" id="description") #{isEdit ? product.description: ""}
       
     if isEdit 
-      input(type="hidden" name="id" value=(product.id))
+      input(type="hidden" name="id" value=(product._id))
 
     button.submit-button(type="submit") #{isEdit ? "Edit Product" : "Add Product"}
     

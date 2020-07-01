@@ -10,14 +10,10 @@ const getAddProductsPage = (req, res, next) => {
 const postAddProductsPage = (req, res) => {
   const { productTitle, imageUrl, price, description } = req.body;
 
-  req.user
-    .createProduct({
-      title: productTitle,
-      price,
-      imageUrl,
-      description,
-    })
+  new Product(productTitle, price, imageUrl, description)
+    .save()
     .then((result) => {
+      console.log("----then", result);
       res.redirect("/admin/products");
     })
     .catch((err) => console.log(err));
@@ -27,15 +23,8 @@ const getEditProductPage = (req, res) => {
   const editMode = req.query.edit;
   const { productId } = req.params;
 
-  req.user
-    .getProducts({
-      where: {
-        id: productId,
-      },
-    })
-    .then((products) => {
-      const product = products[0];
-
+  Product.findById(productId)
+    .then((product) => {
       if (!product) {
         res.redirect("/admin/products");
       }
@@ -53,18 +42,8 @@ const getEditProductPage = (req, res) => {
 const postEditProduct = (req, res) => {
   const { id, productTitle, imageUrl, price, description } = req.body;
 
-  req.user
-    .getProducts({ where: { id } })
-    .then((products) => {
-      const product = products[0];
-
-      product.title = productTitle;
-      product.imageUrl = imageUrl;
-      product.price = price;
-      product.description = description;
-
-      return product.save();
-    })
+  new Product(productTitle, price, imageUrl, description, id)
+    .update()
     .then((result) => {
       res.redirect("/admin/products");
     })
@@ -74,15 +53,7 @@ const postEditProduct = (req, res) => {
 const postDeleteProduct = (req, res) => {
   const { id } = req.body;
 
-  req.user
-    .getProducts({
-      where: {
-        id,
-      },
-    })
-    .then((products) => {
-      return products[0].destroy();
-    })
+  Product.deleteById(id)
     .then((result) => {
       res.redirect("/admin/products");
     })
@@ -90,8 +61,7 @@ const postDeleteProduct = (req, res) => {
 };
 
 const getAdminProductsPage = (req, res, next) => {
-  req.user
-    .getProducts()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/products", {
         products,
