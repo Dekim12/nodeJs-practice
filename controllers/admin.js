@@ -1,5 +1,17 @@
 const Product = require("../models/product");
 
+const getAdminProductsPage = (req, res, next) => {
+  Product.fetchAll()
+    .then((products) => {
+      res.render("admin/products", {
+        products,
+        title: "Admin Products",
+        path: "/admin/products",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
 const getAddProductsPage = (req, res, next) => {
   res.render("admin/editProduct", {
     title: "Add Product",
@@ -9,8 +21,9 @@ const getAddProductsPage = (req, res, next) => {
 
 const postAddProductsPage = (req, res) => {
   const { productTitle, imageUrl, price, description } = req.body;
+  const userId = req.user._id;
 
-  new Product(productTitle, price, imageUrl, description)
+  new Product(productTitle, price, imageUrl, description, userId)
     .save()
     .then((result) => {
       console.log("----then", result);
@@ -41,8 +54,9 @@ const getEditProductPage = (req, res) => {
 
 const postEditProduct = (req, res) => {
   const { id, productTitle, imageUrl, price, description } = req.body;
+  const userId = req.user._id;
 
-  new Product(productTitle, price, imageUrl, description, id)
+  new Product(productTitle, price, imageUrl, description, userId, id)
     .update()
     .then((result) => {
       res.redirect("/admin/products");
@@ -56,18 +70,6 @@ const postDeleteProduct = (req, res) => {
   Product.deleteById(id)
     .then((result) => {
       res.redirect("/admin/products");
-    })
-    .catch((err) => console.log(err));
-};
-
-const getAdminProductsPage = (req, res, next) => {
-  Product.fetchAll()
-    .then((products) => {
-      res.render("admin/products", {
-        products,
-        title: "Admin Products",
-        path: "/admin/products",
-      });
     })
     .catch((err) => console.log(err));
 };

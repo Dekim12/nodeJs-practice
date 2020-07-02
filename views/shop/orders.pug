@@ -5,11 +5,17 @@ block content
   if orders.length > 0
     ul.order-items
       each order in orders
-        li.order-item 
-          h1 #{order.id}
+        li.nav-list.order-item 
+          h1 #{"Order ID: " + order._id}
+          h2 #{"User: " + order.user.name}
           ul
-            each product in order.products
-              li #{product.title + " - " + product.orderItem.quantity}
+            each product in order.items
+              li.prod-item 
+                p #{product.title}
+                p #{"Count: " + product.quantity}
+
+          h1.total-price #{"$" + order.totalPrice}
+    
 
   else
     h1 There are no orders

@@ -9,9 +9,9 @@ block content
       each prod in products 
         li.cart-item 
           p #{prod.title}
-          p #{"Quantity: " + prod.cartItem.quantity}
+          p #{"Quantity: " + prod.quantity}
           form(action=("/cart-delete-item") method="POST")
-            input(type="hidden" name="productId" value=prod.id)
+            input(type="hidden" name="productId" value=prod._id)
             button.action-btn(type="submit") DELETE
     form(action="/create-order" method="POST")
       button.action-btn(type="submit") ORDER
