@@ -1,7 +1,10 @@
 const Product = require("../models/product");
+const Order = require("../models/order");
 
 const getIndex = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
+    // .select("title price -_id")
+    // .populate("userId", "name")
     .then((products) => {
       res.render("shop/index", {
         products,
@@ -13,7 +16,7 @@ const getIndex = (req, res, next) => {
 };
 
 const getProductsPage = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("shop/index", {
         products,
@@ -40,8 +43,19 @@ const getProduct = (req, res, next) => {
 
 const getCartPage = (req, res, next) => {
   req.user
-    .getCartProducts()
-    .then((products) => {
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then((userData) => {
+      const products = userData.cart.items.map((item) => {
+        const { _id, title } = item.productId;
+
+        return {
+          _id,
+          title,
+          quantity: item.quantity,
+        };
+      });
+
       res.render("shop/cart", {
         title: "Product Cart",
         path: "/cart",
@@ -84,8 +98,7 @@ const getCheckoutPage = (req, res, next) => {
 };
 
 const getOrdersPage = (req, res, next) => {
-  req.user
-    .getOrders()
+  Order.find({ "user.userId": req.user._id })
     .then((orders) => {
       res.render("shop/orders", {
         title: "Your Orders",
@@ -98,7 +111,35 @@ const getOrdersPage = (req, res, next) => {
 
 const postCreateOrder = (req, res, next) => {
   req.user
-    .addCartToOrder()
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then((userData) => {
+      const productsData = userData.cart.items.reduce(
+        (result, item) => {
+          result.products.push({
+            product: { ...item.productId._doc },
+            quantity: item.quantity,
+          });
+          result.totalPrice += item.quantity * item.productId.price;
+
+          return result;
+        },
+        { products: [], totalPrice: 0 }
+      );
+
+      const order = new Order({
+        user: {
+          name: req.user.name,
+          userId: req.user,
+        },
+        ...productsData,
+      });
+
+      return order.save();
+    })
+    .then(() => {
+      return req.user.clearCart();
+    })
     .then(() => {
       res.redirect("/orders");
     })

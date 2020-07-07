@@ -9,10 +9,10 @@ block content
           h1 #{"Order ID: " + order._id}
           h2 #{"User: " + order.user.name}
           ul
-            each product in order.items
+            each productData in order.products
               li.prod-item 
-                p #{product.title}
-                p #{"Count: " + product.quantity}
+                p #{productData.product.title}
+                p #{"Count: " + productData.quantity}
 
           h1.total-price #{"$" + order.totalPrice}
     

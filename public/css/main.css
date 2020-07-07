@@ -16,16 +16,18 @@ main {
 }
 
 .main-header {
-  width: 100%;
   height: 56px;
-  background-color: #407e45;
-  padding: 0 15px;
+  background-color: #0d4d11;
+  padding: 0 25px;
+  display: flex;
 }
 
 .nav-bar {
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .nav-list {
@@ -49,7 +51,7 @@ main {
 .nav-item a:hover,
 .nav-item a:active,
 .nav-item a.active {
-  color: #002c21;
+  color: #81f069;
 }
 
 .order-item {
@@ -96,4 +98,8 @@ main {
 .order-item .total-price {
   margin-top: 15px;
   align-self: center;
+}
+
+.login-block {
+  padding-top: 200px;
 }
