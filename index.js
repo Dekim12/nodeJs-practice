@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoSessionStore = require("connect-mongodb-session")(session);
 
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
@@ -10,9 +12,14 @@ const errorController = require("./controllers/errors");
 const rootDir = require("./utils/app-path");
 const User = require("./models/user");
 
-const testUserId = "5f030bbc0ae86c3d8b102698"; // should change
+const MONGODB_URI =
+  "mongodb+srv://siarhei_1:123698745wasd@cluster0-luq5l.mongodb.net/shopDB?retryWrites=true&w=majority";
 
 const app = express();
+const sessionStore = new MongoSessionStore({
+  uri: MONGODB_URI,
+  collection: "sessions",
+});
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -20,8 +27,22 @@ app.set("views", "views");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(rootDir, "public")));
 
+//configure sessions
+app.use(
+  session({
+    secret: "some secret value",
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+  })
+);
+
 app.use((req, res, next) => {
-  User.findById(testUserId)
+  if (!req.session.user) {
+    return next();
+  }
+
+  User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
 
@@ -37,13 +58,10 @@ app.use(shopRoutes);
 app.use(errorController.get404Error);
 
 mongoose
-  .connect(
-    "mongodb+srv://siarhei_1:123698745wasd@cluster0-luq5l.mongodb.net/shopDB?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then((res) => {
     User.findOne().then((user) => {
       if (!user) {

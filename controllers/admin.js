@@ -1,21 +1,27 @@
 const Product = require("../models/product");
 
 const getAdminProductsPage = (req, res, next) => {
+  const { isLoggedIn } = req.session;
+
   Product.find()
     .then((products) => {
       res.render("admin/products", {
         products,
         title: "Admin Products",
         path: "/admin/products",
+        isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
 };
 
 const getAddProductsPage = (req, res, next) => {
+  const { isLoggedIn } = req.session;
+
   res.render("admin/editProduct", {
     title: "Add Product",
     path: "/admin/add-product",
+    isLoggedIn,
   });
 };
 
@@ -32,6 +38,8 @@ const postAddProductsPage = (req, res) => {
 };
 
 const getEditProductPage = (req, res) => {
+  const { isLoggedIn } = req.session;
+
   const editMode = req.query.edit;
   const { productId } = req.params;
 
@@ -46,6 +54,7 @@ const getEditProductPage = (req, res) => {
         path: "/admin/edit-products",
         isEdit: !!editMode,
         product,
+        isLoggedIn,
       });
     })
     .catch((err) => console.log(err));

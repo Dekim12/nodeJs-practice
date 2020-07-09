@@ -101,5 +101,21 @@ main {
 }
 
 .login-block {
-  padding-top: 200px;
+  padding-top: 150px;
+}
+
+.logout-button {
+  font: inherit;
+  font-size: 30px;
+  color: white;
+  border: 2px solid #426d40;
+  background-color: #194b14;
+  border-radius: 5px;
+  padding: 15px 35px;
+  cursor: pointer;
+}
+
+.logout-button:hover,
+.logout-button:active {
+  background-color: #5c8564;
 }

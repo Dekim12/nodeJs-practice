@@ -1,0 +1,9 @@
+extends ../layouts/mainLayout.pug
+
+block styles
+  link(rel="stylesheet", href="../../css/add-product.css")
+
+block content
+  .login-block
+    form.logout-form(action=("/logout") method="POST")
+      button.logout-button(type="submit") Logout
