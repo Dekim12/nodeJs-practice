@@ -13,5 +13,6 @@ block content
     
       if isLoggedIn
         form(action="/cart" method="POST")
-          button.action-btn(type="submit") Add to Cart
           input(type="hidden" name="productId" value=product._id)
+          input(type="hidden" name="_csrf" value=csrfToken)
+          button.action-btn(type="submit") Add to Cart

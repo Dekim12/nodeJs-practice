@@ -21,8 +21,9 @@ block content
             
             if isLoggedIn
               form(action="/cart" method="POST")
-                button.action-btn(type="submit") Add to Cart
+                input(type="hidden" name="_csrf" value=csrfToken)
                 input(type="hidden" name="productId" value=prod._id)
+                button.action-btn(type="submit") Add to Cart
 
     else 
       h1 There are no products

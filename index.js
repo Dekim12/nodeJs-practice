@@ -2,7 +2,9 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const csrf = require("csurf");
 const session = require("express-session");
+const flash = require("connect-flash");
 const MongoSessionStore = require("connect-mongodb-session")(session);
 
 const adminRoutes = require("./routes/admin");
@@ -20,6 +22,7 @@ const sessionStore = new MongoSessionStore({
   uri: MONGODB_URI,
   collection: "sessions",
 });
+const csrfProtection = csrf();
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -36,6 +39,8 @@ app.use(
     store: sessionStore,
   })
 );
+app.use(csrfProtection); //must be after session
+app.use(flash());
 
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -51,6 +56,15 @@ app.use((req, res, next) => {
     .catch((err) => console.log(err));
 });
 
+//added local variables for all pages
+//should be before routes
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  next();
+});
+
 app.use("/admin", adminRoutes);
 app.use(authRoutes);
 app.use(shopRoutes);
@@ -63,16 +77,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((res) => {
-    User.findOne().then((user) => {
-      if (!user) {
-        new User({
-          name: "Siarhei",
-          email: "test@mail.com",
-          cart: { items: [] },
-        }).save();
-      }
-    });
-
     app.listen(3000, () => console.log("Server is working!"));
   })
   .catch((err) => console.log(err));

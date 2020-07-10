@@ -20,6 +20,7 @@ block content
             a.action-link(href=("/admin/edit-product/" + prod._id + "?edit=true")) Edit
             form(action="/admin/delete-product" method="POST")
               input(type="hidden" name="id" value=(prod._id))
+              input(type="hidden" name="_csrf" value=csrfToken)
               button.action-btn(type="submit") Delete
     else 
       h1 There are no products

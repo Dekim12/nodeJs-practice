@@ -6,6 +6,8 @@ block styles
 block content
   form.product-form(action=("/admin/".concat(isEdit ? "edit-product" : "add-product")) method="POST")
     .form-control
+      input(type="hidden" name="_csrf" value=csrfToken)
+
       label(for="input-label") Product Title
       input(type="text" name="productTitle" id="input-label" value=(isEdit ? product.title : ""))
 
@@ -20,6 +22,7 @@ block content
       
     if isEdit 
       input(type="hidden" name="id" value=(product._id))
+      
 
     button.submit-button(type="submit") #{isEdit ? "Edit Product" : "Add Product"}
     

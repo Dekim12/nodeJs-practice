@@ -101,6 +101,7 @@ main {
 }
 
 .login-block {
+  position: relative;
   padding-top: 150px;
 }
 
@@ -118,4 +119,17 @@ main {
 .logout-button:hover,
 .logout-button:active {
   background-color: #5c8564;
+}
+
+.err-message {
+  position: absolute;
+  top: 30px;
+  margin: auto;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(110, 13, 13, 0.3);
+  background-color: #ffe0de;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
 }

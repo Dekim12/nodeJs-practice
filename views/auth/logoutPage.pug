@@ -6,4 +6,5 @@ block styles
 block content
   .login-block
     form.logout-form(action=("/logout") method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
       button.logout-button(type="submit") Logout

@@ -5,6 +5,10 @@ block styles
 
 block content
   .login-block
+    if errorMessage
+      .err-message
+        p #{errorMessage}
+
     form.product-form(action=("/login") method="POST")
       .form-control
         label(for="email") Email 
@@ -12,5 +16,7 @@ block content
 
         label(for="password") Password
         input(type="password" name="password" id="password") 
+
+        input(type="hidden" name="_csrf" value=csrfToken)
 
       button.submit-button(type="submit") Login

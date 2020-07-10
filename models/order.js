@@ -20,6 +20,7 @@ const orderSchema = new mongoose.Schema({
       required: true,
     },
     name: { type: String, required: true },
+    email: { type: String, required: true },
   },
   totalPrice: {
     type: Number,

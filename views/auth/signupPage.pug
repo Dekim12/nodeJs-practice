@@ -5,8 +5,15 @@ block styles
 
 block content
   .login-block
+    if errorMessage
+      .err-message
+        p #{errorMessage}
+
     form.product-form(action=("/signup") method="POST")
       .form-control
+        label(for="name") User Name
+        input(type="text" name="name" id="name") 
+
         label(for="email") Email 
         input(type="email" name="email" id="email") 
 
@@ -16,4 +23,6 @@ block content
         label(for="confirm-password") Confirm Password
         input(type="password" name="confirmedPassword" id="confirm-password") 
 
-      button.submit-button(type="submit") SignUp
+        input(type="hidden" name="_csrf" value=csrfToken)
+
+      button.submit-button(type="submit") Signup

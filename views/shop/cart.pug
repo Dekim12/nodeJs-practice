@@ -12,8 +12,10 @@ block content
           p #{"Quantity: " + prod.quantity}
           form(action=("/cart-delete-item") method="POST")
             input(type="hidden" name="productId" value=prod._id)
+            input(type="hidden" name="_csrf" value=csrfToken)
             button.action-btn(type="submit") DELETE
     form(action="/create-order" method="POST")
+      input(type="hidden" name="_csrf" value=csrfToken)
       button.action-btn(type="submit") ORDER
 
   else   
