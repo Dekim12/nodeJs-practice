@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 
@@ -7,27 +8,45 @@ const getLoginPage = (req, res) => {
     title: "Login",
     path: "/login",
     errorMessage: req.flash("error")[0],
+    oldInputsValues: {},
   });
 };
 
 const postLoginUser = (req, res) => {
   const { email, password } = req.body;
 
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/loginPage", {
+      title: "Login",
+      path: "/login",
+      errorMessage: errors.array()[0].msg,
+      oldInputsValues: { email, password },
+    });
+  }
+
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        req.flash("error", "Invalid email.");
-
-        return res.redirect("/login");
+        return res.status(422).render("auth/loginPage", {
+          title: "Login",
+          path: "/login",
+          errorMessage: "Invalid Email or Password",
+          oldInputsValues: { email, password },
+        });
       }
 
       return bcrypt
         .compare(password, user.password)
         .then((isEqual) => {
           if (!isEqual) {
-            req.flash("error", "Invalid password.");
-
-            return res.redirect("/login");
+            return res.status(422).render("auth/loginPage", {
+              title: "Login",
+              path: "/login",
+              errorMessage: "Invalid Email or Password",
+              oldInputsValues: { email, password },
+            });
           }
 
           req.session.isLoggedIn = true;
@@ -63,26 +82,28 @@ const getSignUpPage = (req, res) => {
     title: "SignUp",
     path: "/signup",
     errorMessage: req.flash("error")[0],
+    oldInputsValues: {},
+    validationErrors: [],
   });
 };
 
 const postSignUpUser = (req, res) => {
   const { name, email, password, confirmedPassword } = req.body;
 
-  User.findOne({ email })
-    .then((user) => {
-      if (user) {
-        req.flash("error", "You have an account.");
+  const errors = validationResult(req);
 
-        return res.redirect("/login");
-      } else if (password !== confirmedPassword) {
-        req.flash("error", "Invalid password.");
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/signupPage", {
+      title: "SignUp",
+      path: "/signup",
+      errorMessage: errors.array()[0].msg,
+      oldInputsValues: { name, email, password, confirmedPassword },
+      validationErrors: errors.array(),
+    });
+  }
 
-        return res.redirect("/signup");
-      }
-
-      return bcrypt.hash(password, 12);
-    })
+  bcrypt
+    .hash(password, 12)
     .then((hashPassword) => {
       if (!hashPassword) {
         return;

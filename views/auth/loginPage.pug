@@ -4,18 +4,30 @@ block styles
   link(rel="stylesheet", href="../../css/add-product.css")
 
 block content
-  .login-block
+  .content-block
     if errorMessage
       .err-message
         p #{errorMessage}
 
-    form.product-form(action=("/login") method="POST")
+    form.product-form(action=("/login") method="POST" novalidate)
       .form-control
         label(for="email") Email 
-        input(type="email" name="email" id="email") 
+        input(
+          class=(errorMessage ? 'invalid' : '')  
+          type="email" 
+          name="email" 
+          id="email" 
+          value=oldInputsValues.email
+        ) 
 
         label(for="password") Password
-        input(type="password" name="password" id="password") 
+        input(
+          class=(errorMessage ? 'invalid' : '')  
+          type="password" 
+          name="password" 
+          id="password" 
+          value=oldInputsValues.password
+        ) 
 
         input(type="hidden" name="_csrf" value=csrfToken)
 

@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet", href="../../css/add-product.css")
 
 block content
-  .login-block
+  .content-block
     form.logout-form(action=("/logout") method="POST")
       input(type="hidden" name="_csrf" value=csrfToken)
       button.logout-button(type="submit") Logout

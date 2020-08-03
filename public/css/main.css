@@ -100,9 +100,9 @@ main {
   align-self: center;
 }
 
-.login-block {
+.content-block {
   position: relative;
-  padding-top: 150px;
+  padding-top: 140px;
 }
 
 .logout-button {
