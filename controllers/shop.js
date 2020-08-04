@@ -12,7 +12,12 @@ const getIndex = (req, res, next) => {
         path: "/",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const getProductsPage = (req, res, next) => {
@@ -24,7 +29,12 @@ const getProductsPage = (req, res, next) => {
         path: "/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const getProduct = (req, res, next) => {
@@ -38,7 +48,12 @@ const getProduct = (req, res, next) => {
         path: "/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const getCartPage = (req, res, next) => {
@@ -62,7 +77,12 @@ const getCartPage = (req, res, next) => {
         products,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const postCart = (req, res, next) => {
@@ -76,10 +96,15 @@ const postCart = (req, res, next) => {
     .then((result) => {
       res.redirect("/cart");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
-const postDeleteCartItem = (req, res) => {
+const postDeleteCartItem = (req, res, next) => {
   const { productId } = req.body;
 
   req.user
@@ -87,7 +112,12 @@ const postDeleteCartItem = (req, res) => {
     .then(() => {
       res.redirect("/cart");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const getOrdersPage = (req, res, next) => {
@@ -99,7 +129,12 @@ const getOrdersPage = (req, res, next) => {
         orders,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const postCreateOrder = (req, res, next) => {
@@ -137,7 +172,12 @@ const postCreateOrder = (req, res, next) => {
     .then(() => {
       res.redirect("/orders");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 module.exports = {

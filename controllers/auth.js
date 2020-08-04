@@ -12,7 +12,7 @@ const getLoginPage = (req, res) => {
   });
 };
 
-const postLoginUser = (req, res) => {
+const postLoginUser = (req, res, next) => {
   const { email, password } = req.body;
 
   const errors = validationResult(req);
@@ -57,9 +57,19 @@ const postLoginUser = (req, res) => {
 
           res.redirect("/");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+
+          return next(error);
+        });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const getLogoutPage = (req, res) => {
@@ -87,7 +97,7 @@ const getSignUpPage = (req, res) => {
   });
 };
 
-const postSignUpUser = (req, res) => {
+const postSignUpUser = (req, res, next) => {
   const { name, email, password, confirmedPassword } = req.body;
 
   const errors = validationResult(req);
@@ -126,7 +136,12 @@ const postSignUpUser = (req, res) => {
 
       res.redirect("/");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 module.exports = {

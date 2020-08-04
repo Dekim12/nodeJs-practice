@@ -10,7 +10,12 @@ const getAdminProductsPage = (req, res, next) => {
         path: "/admin/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 const getAddProductsPage = (req, res, next) => {
@@ -23,7 +28,7 @@ const getAddProductsPage = (req, res, next) => {
   });
 };
 
-const postAddProductsPage = (req, res) => {
+const postAddProductsPage = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
   const userId = req.user._id;
   const errors = validationResult(req);
@@ -50,10 +55,15 @@ const postAddProductsPage = (req, res) => {
     .then((result) => {
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
-const getEditProductPage = (req, res) => {
+const getEditProductPage = (req, res, next) => {
   const editMode = req.query.edit;
   const { productId } = req.params;
 
@@ -73,10 +83,15 @@ const getEditProductPage = (req, res) => {
         validationErrors: [],
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
-const postEditProduct = (req, res) => {
+const postEditProduct = (req, res, next) => {
   const { id, title, imageUrl, price, description } = req.body;
   const errors = validationResult(req);
 
@@ -110,17 +125,27 @@ const postEditProduct = (req, res) => {
     .then((result) => {
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
-const postDeleteProduct = (req, res) => {
+const postDeleteProduct = (req, res, next) => {
   const { id } = req.body;
 
   Product.findByIdAndRemove(id)
     .then((result) => {
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      return next(error);
+    });
 };
 
 module.exports = {

@@ -13,6 +13,7 @@ const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/errors");
 const rootDir = require("./utils/app-path");
 const User = require("./models/user");
+const { error } = require("console");
 
 const MONGODB_URI =
   "mongodb+srv://siarhei_1:123698745wasd@cluster0-luq5l.mongodb.net/shopDB?retryWrites=true&w=majority";
@@ -42,6 +43,15 @@ app.use(
 app.use(csrfProtection); //must be after session
 app.use(flash());
 
+//added local variables for all pages
+//should be before routes
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  next();
+});
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -53,23 +63,24 @@ app.use((req, res, next) => {
 
       next();
     })
-    .catch((err) => console.log(err));
-});
-
-//added local variables for all pages
-//should be before routes
-app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-
-  next();
+    .catch((err) => next(new Error(err)));
 });
 
 app.use("/admin", adminRoutes);
 app.use(authRoutes);
 app.use(shopRoutes);
 
+app.get("/500", errorController.get500Error);
+
 app.use(errorController.get404Error);
+
+app.use((err, req, res, next) => {
+  res.status(500).render("shop/500", {
+    title: "Error 500!",
+    path: "/500",
+    isLoggedIn: req.session.isLoggedIn,
+  });
+});
 
 mongoose
   .connect(MONGODB_URI, {
